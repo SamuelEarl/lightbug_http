@@ -348,7 +348,7 @@ def test_list_iter():
     fn sum(vs: OwningList[Int]) -> Int:
         var sum = 0
         for v in vs:
-            sum += v[]
+            sum += v
         return sum
 
     assert_equal(6, sum(vs))
@@ -360,12 +360,12 @@ def test_list_iter_mutable():
     vs.append(2)
     vs.append(3)
 
-    for v in vs:
-        v[] += 1
+    for ref v in vs:
+        v += 1
 
     var sum = 0
     for v in vs:
-        sum += v[]
+        sum += v
 
     assert_equal(9, sum)
 
@@ -441,7 +441,7 @@ def test_indexing():
 var g_dtor_count: Int = 0
 
 
-struct DtorCounter(CollectionElement):
+struct DtorCounter(Copyable, Movable):
     # NOTE: payload is required because OwningList does not support zero sized structs.
     var payload: Int
 

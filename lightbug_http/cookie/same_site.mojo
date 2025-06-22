@@ -1,5 +1,5 @@
 @value
-struct SameSite:
+struct SameSite(Stringable):
     var value: UInt8
 
     alias none = SameSite(0)

@@ -208,7 +208,7 @@ struct URI(Writable, Stringable, Representable):
             var query_items = query.split(QueryDelimiters.ITEM)
 
             for item in query_items:
-                var key_val = item[].split(QueryDelimiters.ITEM_ASSIGN, 1)
+                var key_val = item.split(QueryDelimiters.ITEM_ASSIGN, 1)
                 var key = unquote[expand_plus=True](key_val[0])
 
                 if key:

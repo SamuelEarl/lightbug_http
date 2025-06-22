@@ -122,7 +122,7 @@ struct OwningList[T: Movable](Movable, Sized, Boolable):
 
         Parameters:
             U: The type of the elements in the list. Must implement the
-              traits `EqualityComparable` and `CollectionElement`.
+              traits `EqualityComparable`, `Copyable`, and `Movable`.
 
         Args:
             value: The value to find.
@@ -131,7 +131,7 @@ struct OwningList[T: Movable](Movable, Sized, Boolable):
             True if the value is contained in the list, False otherwise.
         """
         for i in self:
-            if i[] == value:
+            if i == value:
                 return True
         return False
 

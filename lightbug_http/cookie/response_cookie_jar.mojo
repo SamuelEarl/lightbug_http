@@ -41,7 +41,7 @@ struct ResponseCookieKey(KeyElement):
 
 
 @value
-struct ResponseCookieJar(Writable, Stringable):
+struct ResponseCookieJar(Writable, Stringable, Copyable, Movable):
     var _inner: Dict[ResponseCookieKey, Cookie]
 
     fn __init__(out self):
@@ -50,7 +50,7 @@ struct ResponseCookieJar(Writable, Stringable):
     fn __init__(out self, *cookies: Cookie):
         self._inner = Dict[ResponseCookieKey, Cookie]()
         for cookie in cookies:
-            self.set_cookie(cookie[])
+            self.set_cookie(cookie)
 
     @always_inline
     fn __setitem__(mut self, key: ResponseCookieKey, value: Cookie):
@@ -90,9 +90,9 @@ struct ResponseCookieJar(Writable, Stringable):
     fn from_headers(mut self, headers: List[String]) raises:
         for header in headers:
             try:
-                self.set_cookie(Cookie.from_set_header(header[]))
+                self.set_cookie(Cookie.from_set_header(header))
             except:
-                raise Error("Failed to parse cookie header string " + header[])
+                raise Error("Failed to parse cookie header string " + header)
 
     # fn encode_to(mut self, mut writer: ByteWriter):
     #     for cookie in self._inner.values():
@@ -101,5 +101,5 @@ struct ResponseCookieJar(Writable, Stringable):
 
     fn write_to[T: Writer](self, mut writer: T):
         for cookie in self._inner.values():
-            var v = cookie[].build_header_value()
+            var v = cookie.build_header_value()
             write_header(writer, HeaderKey.SET_COOKIE, v)

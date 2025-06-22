@@ -2,7 +2,7 @@ from collections import Optional
 from lightbug_http.header import HeaderKey
 
 
-struct Cookie(CollectionElement):
+struct Cookie(Copyable, Movable):
     alias EXPIRES = "Expires"
     alias MAX_AGE = "Max-Age"
     alias DOMAIN = "Domain"
