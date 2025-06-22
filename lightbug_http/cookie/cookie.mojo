@@ -47,15 +47,15 @@ struct Cookie(Copyable, Movable):
             elif part == Cookie.HTTP_ONLY:
                 cookie.http_only = True
             elif part.startswith(Cookie.SAME_SITE):
-                cookie.same_site = SameSite.from_string(part.removeprefix(Cookie.SAME_SITE + Cookie.EQUAL))
+                cookie.same_site = SameSite.from_string(String(part.removeprefix(Cookie.SAME_SITE + Cookie.EQUAL)))
             elif part.startswith(Cookie.DOMAIN):
-                cookie.domain = part.removeprefix(Cookie.DOMAIN + Cookie.EQUAL)
+                cookie.domain = String(part.removeprefix(Cookie.DOMAIN + Cookie.EQUAL))
             elif part.startswith(Cookie.PATH):
-                cookie.path = part.removeprefix(Cookie.PATH + Cookie.EQUAL)
+                cookie.path = String(part.removeprefix(Cookie.PATH + Cookie.EQUAL))
             elif part.startswith(Cookie.MAX_AGE):
-                cookie.max_age = Duration.from_string(part.removeprefix(Cookie.MAX_AGE + Cookie.EQUAL))
+                cookie.max_age = Duration.from_string(String(part.removeprefix(Cookie.MAX_AGE + Cookie.EQUAL)))
             elif part.startswith(Cookie.EXPIRES):
-                var expires = Expiration.from_string(part.removeprefix(Cookie.EXPIRES + Cookie.EQUAL))
+                var expires = Expiration.from_string(String(part.removeprefix(Cookie.EXPIRES + Cookie.EQUAL)))
                 if expires:
                     cookie.expires = expires.value()
 

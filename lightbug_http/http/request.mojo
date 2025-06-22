@@ -31,7 +31,7 @@ struct RequestMethod:
 
 
 @value
-struct HTTPRequest(Writable, Stringable):
+struct HTTPRequest(Writable, Stringable, Encodable):
     var headers: Headers
     var cookies: RequestCookieJar
     var uri: URI

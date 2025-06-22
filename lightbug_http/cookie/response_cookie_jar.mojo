@@ -41,7 +41,7 @@ struct ResponseCookieKey(KeyElement):
 
 
 @value
-struct ResponseCookieJar(Writable, Stringable, Copyable, Movable):
+struct ResponseCookieJar(Writable, Stringable, Copyable, Movable, Sized):
     var _inner: Dict[ResponseCookieKey, Cookie]
 
     fn __init__(out self):

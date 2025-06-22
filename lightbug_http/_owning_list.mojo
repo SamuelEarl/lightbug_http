@@ -131,7 +131,7 @@ struct OwningList[T: Movable](Movable, Sized, Boolable):
             True if the value is contained in the list, False otherwise.
         """
         for i in self:
-            if i == value:
+            if i[] == value:
                 return True
         return False
 

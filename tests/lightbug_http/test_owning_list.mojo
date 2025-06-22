@@ -348,7 +348,7 @@ def test_list_iter():
     fn sum(vs: OwningList[Int]) -> Int:
         var sum = 0
         for v in vs:
-            sum += v
+            sum += v[]
         return sum
 
     assert_equal(6, sum(vs))
@@ -360,12 +360,12 @@ def test_list_iter_mutable():
     vs.append(2)
     vs.append(3)
 
-    for ref v in vs:
-        v += 1
+    for v in vs:
+        v[] += 1
 
     var sum = 0
     for v in vs:
-        sum += v
+        sum += v[]
 
     assert_equal(9, sum)
 
@@ -438,7 +438,7 @@ def test_indexing():
 # ===-------------------------------------------------------------------===#
 # OwningList dtor tests
 # ===-------------------------------------------------------------------===#
-var g_dtor_count: Int = 0
+var __g_dtor_count: Int = 0
 
 
 struct DtorCounter(Copyable, Movable):
@@ -459,21 +459,21 @@ struct DtorCounter(Copyable, Movable):
         existing.payload = 0
 
     fn __del__(owned self):
-        g_dtor_count += 1
+        __g_dtor_count += 1
 
 
 def inner_test_list_dtor():
     # explicitly reset global counter
-    g_dtor_count = 0
+    __g_dtor_count = 0
 
     var l = OwningList[DtorCounter]()
-    assert_equal(g_dtor_count, 0)
+    assert_equal(__g_dtor_count, 0)
 
     l.append(DtorCounter())
-    assert_equal(g_dtor_count, 0)
+    assert_equal(__g_dtor_count, 0)
 
     l^.__del__()
-    assert_equal(g_dtor_count, 1)
+    assert_equal(__g_dtor_count, 1)
 
 
 def test_list_dtor():
@@ -481,7 +481,7 @@ def test_list_dtor():
     inner_test_list_dtor()
 
     # verify we still only ran the destructor once
-    assert_equal(g_dtor_count, 1)
+    assert_equal(__g_dtor_count, 1)
 
 
 def test_list_repr():
