@@ -139,7 +139,7 @@ struct ListenConfig:
         return listener^
 
 
-struct TCPConnection:
+struct TCPConnection(Connection):
     var socket: Socket[TCPAddr]
 
     fn __init__(out self, owned socket: Socket[TCPAddr]):

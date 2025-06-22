@@ -6,7 +6,7 @@ from lightbug_http.uri import Scheme
 
 
 @value
-struct PoolKey(Hashable, KeyElement, Writable):
+struct PoolKey(Hashable, KeyElement, Writable, Stringable):
     var host: String
     var port: UInt16
     var scheme: Scheme
@@ -87,8 +87,8 @@ struct PoolManager[ConnectionType: Connection]():
         var connection = self._connections.pop(index)
         #  Shift everything over by one
         for kv in self.mapping.items():
-            if kv[].value > index:
-                self.mapping[kv[].key] -= 1
+            if kv.value > index:
+                self.mapping[kv.key] -= 1
 
         logger.debug("Checked out connection for peer:", String(key) + ", from index:", self._connections.size + 1)
         return connection^
