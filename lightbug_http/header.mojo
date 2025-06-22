@@ -52,7 +52,7 @@ struct Headers(Writable, Stringable):
     fn __init__(out self, owned *headers: Header):
         self._inner = Dict[String, String]()
         for header in headers:
-            self[header[].key.lower()] = header[].value
+            self[header.key.lower()] = header.value
 
     @always_inline
     fn empty(self) -> Bool:
@@ -112,7 +112,7 @@ struct Headers(Writable, Stringable):
 
     fn write_to[T: Writer, //](self, mut writer: T):
         for header in self._inner.items():
-            write_header(writer, header[].key, header[].value)
+            write_header(writer, header.key, header.value)
 
     fn __str__(self) -> String:
         return String.write(self)

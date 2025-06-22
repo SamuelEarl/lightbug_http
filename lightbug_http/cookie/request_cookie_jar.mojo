@@ -16,7 +16,7 @@ struct RequestCookieJar(Writable, Stringable):
     fn __init__(out self, *cookies: Cookie):
         self._inner = Dict[String, String]()
         for cookie in cookies:
-            self._inner[cookie[].name] = cookie[].value
+            self._inner[cookie.name] = cookie.value
 
     fn parse_cookies(mut self, headers: Headers) raises:
         var cookie_header = headers.get(HeaderKey.COOKIE)
@@ -27,9 +27,9 @@ struct RequestCookieJar(Writable, Stringable):
 
         for chunk in cookie_strings:
             var key = String("")
-            var value = chunk[]
-            if "=" in chunk[]:
-                var key_value = chunk[].split("=")
+            var value = chunk
+            if "=" in chunk:
+                var key_value = chunk.split("=")
                 key = key_value[0]
                 value = key_value[1]
 
@@ -64,7 +64,7 @@ struct RequestCookieJar(Writable, Stringable):
 
         var header_value = List[String]()
         for cookie in self._inner.items():
-            header_value.append(cookie[].key + equal + cookie[].value)
+            header_value.append(cookie.key + equal + cookie.value)
         return Header(HeaderKey.COOKIE, StaticString("; ").join(header_value))
 
     fn encode_to(mut self, mut writer: ByteWriter):

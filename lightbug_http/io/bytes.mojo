@@ -52,10 +52,8 @@ struct ByteWriter(Writer):
         """
 
         @parameter
-        fn write_arg[T: Writable](arg: T):
-            arg.write_to(self)
-
-        args.each[write_arg]()
+        for i in range(args.__len__()):
+            args[i].write_to(self)
 
     @always_inline
     fn consuming_write(mut self, owned b: Bytes):
@@ -76,7 +74,7 @@ alias OutOfBoundsError = "Tried to read past the end of the ByteReader."
 
 
 @value
-struct ByteView[origin: Origin]:
+struct ByteView[origin: Origin](Sized, Stringable):
     """Convenience wrapper around a Span of Bytes."""
 
     var _inner: Span[Byte, origin]
@@ -201,7 +199,7 @@ struct ByteView[origin: Origin]:
         return Bytes(self._inner)
 
 
-struct ByteReader[origin: Origin]:
+struct ByteReader[origin: Origin](Sized):
     var _inner: Span[Byte, origin]
     var read_pos: Int
 

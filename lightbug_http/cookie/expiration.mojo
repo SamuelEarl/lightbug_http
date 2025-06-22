@@ -1,11 +1,13 @@
+from collections import Optional
 from lightbug_http.external.small_time import SmallTime
+from lightbug_http.strings import to_string
 
 alias HTTP_DATE_FORMAT = "ddd, DD MMM YYYY HH:mm:ss ZZZ"
 alias TZ_GMT = TimeZone(0, "GMT")
 
 
 @value
-struct Expiration(CollectionElement):
+struct Expiration(Copyable, Movable):
     var variant: UInt8
     var datetime: Optional[SmallTime]
 

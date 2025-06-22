@@ -84,4 +84,4 @@ fn main():
     var test = IntegrationTest()
     var results = test.run_tests()
     for test in results.items():
-        print(test[].key + ":", test[].value)
+        print(test.key + ":", test.value)

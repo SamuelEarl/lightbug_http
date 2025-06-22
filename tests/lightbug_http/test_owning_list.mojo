@@ -438,10 +438,10 @@ def test_indexing():
 # ===-------------------------------------------------------------------===#
 # OwningList dtor tests
 # ===-------------------------------------------------------------------===#
-var g_dtor_count: Int = 0
+var __g_dtor_count: Int = 0
 
 
-struct DtorCounter(CollectionElement):
+struct DtorCounter(Copyable, Movable):
     # NOTE: payload is required because OwningList does not support zero sized structs.
     var payload: Int
 
@@ -459,21 +459,21 @@ struct DtorCounter(CollectionElement):
         existing.payload = 0
 
     fn __del__(owned self):
-        g_dtor_count += 1
+        __g_dtor_count += 1
 
 
 def inner_test_list_dtor():
     # explicitly reset global counter
-    g_dtor_count = 0
+    __g_dtor_count = 0
 
     var l = OwningList[DtorCounter]()
-    assert_equal(g_dtor_count, 0)
+    assert_equal(__g_dtor_count, 0)
 
     l.append(DtorCounter())
-    assert_equal(g_dtor_count, 0)
+    assert_equal(__g_dtor_count, 0)
 
     l^.__del__()
-    assert_equal(g_dtor_count, 1)
+    assert_equal(__g_dtor_count, 1)
 
 
 def test_list_dtor():
@@ -481,7 +481,7 @@ def test_list_dtor():
     inner_test_list_dtor()
 
     # verify we still only ran the destructor once
-    assert_equal(g_dtor_count, 1)
+    assert_equal(__g_dtor_count, 1)
 
 
 def test_list_repr():
