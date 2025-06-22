@@ -76,7 +76,7 @@ alias OutOfBoundsError = "Tried to read past the end of the ByteReader."
 
 
 @value
-struct ByteView[origin: Origin]:
+struct ByteView[origin: Origin](Sized):
     """Convenience wrapper around a Span of Bytes."""
 
     var _inner: Span[Byte, origin]
@@ -201,7 +201,7 @@ struct ByteView[origin: Origin]:
         return Bytes(self._inner)
 
 
-struct ByteReader[origin: Origin]:
+struct ByteReader[origin: Origin](Sized):
     var _inner: Span[Byte, origin]
     var read_pos: Int
 

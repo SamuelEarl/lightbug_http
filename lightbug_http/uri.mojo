@@ -55,7 +55,7 @@ fn unquote[expand_plus: Bool = False](input_str: String, disallowed_escapes: Lis
             var sub_str_from_bytes = String()
             sub_str_from_bytes.write_bytes(str_bytes)
             for disallowed in disallowed_escapes:
-                sub_str_from_bytes = sub_str_from_bytes.replace(disallowed[], "")
+                sub_str_from_bytes = sub_str_from_bytes.replace(disallowed, "")
             sub_strings.append(sub_str_from_bytes)
             str_bytes.clear()
 
@@ -171,7 +171,7 @@ struct URI(Writable, Stringable, Representable):
             var port_end = colon + 1
             # loop through the post colon chunk until we find a non-digit character
             for b in host_and_port[colon + 1 :]:
-                if b[] < PortBounds.ZERO or b[] > PortBounds.NINE:
+                if b < PortBounds.ZERO or b > PortBounds.NINE:
                     break
                 port_end += 1
             port = UInt16(atol(String(host_and_port[colon + 1 : port_end])))

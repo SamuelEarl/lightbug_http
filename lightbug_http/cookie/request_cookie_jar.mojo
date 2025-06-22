@@ -64,7 +64,7 @@ struct RequestCookieJar(Writable, Stringable):
 
         var header_value = List[String]()
         for cookie in self._inner.items():
-            header_value.append(cookie[].key + equal + cookie[].value)
+            header_value.append(cookie.key + equal + cookie.value)
         return Header(HeaderKey.COOKIE, StaticString("; ").join(header_value))
 
     fn encode_to(mut self, mut writer: ByteWriter):
