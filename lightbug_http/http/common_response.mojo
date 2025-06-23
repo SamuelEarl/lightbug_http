@@ -15,7 +15,9 @@ fn OK(body: Bytes, content_type: String = "text/plain") -> HTTPResponse:
     )
 
 
-fn OK(body: Bytes, content_type: String, content_encoding: String) -> HTTPResponse:
+fn OK(
+    body: Bytes, content_type: String, content_encoding: String
+) -> HTTPResponse:
     return HTTPResponse(
         headers=Headers(
             Header(HeaderKey.CONTENT_TYPE, content_type),
@@ -25,27 +27,43 @@ fn OK(body: Bytes, content_type: String, content_encoding: String) -> HTTPRespon
     )
 
 
+fn SeeOther(
+    location: String, content_type: String, owned cookies: List[Cookie] = []
+) -> HTTPResponse:
+    return HTTPResponse(
+        bytes("See Other"),
+        cookies=ResponseCookieJar(cookies^),
+        headers=Headers(
+            Header(HeaderKey.LOCATION, location),
+            Header(HeaderKey.CONTENT_TYPE, content_type),
+        ),
+        status_code=303,
+        status_text="See Other",
+    )
+
+
+fn BadRequest() -> HTTPResponse:
+    return HTTPResponse(
+        bytes("Bad Request"),
+        headers=Headers(Header(HeaderKey.CONTENT_TYPE, "text/plain")),
+        status_code=400,
+        status_text="Bad Request",
+    )
+
+
 fn NotFound(path: String) -> HTTPResponse:
     return HTTPResponse(
+        body_bytes=bytes("path " + path + " not found"),
+        headers=Headers(Header(HeaderKey.CONTENT_TYPE, "text/plain")),
         status_code=404,
         status_text="Not Found",
-        headers=Headers(Header(HeaderKey.CONTENT_TYPE, "text/plain")),
-        body_bytes=bytes("path " + path + " not found"),
     )
 
 
 fn InternalError() -> HTTPResponse:
     return HTTPResponse(
         bytes("Failed to process request"),
+        headers=Headers(Header(HeaderKey.CONTENT_TYPE, "text/plain")),
         status_code=500,
-        headers=Headers(Header(HeaderKey.CONTENT_TYPE, "text/plain")),
         status_text="Internal Server Error",
-    )
-
-fn BadRequest() -> HTTPResponse:
-    return HTTPResponse(
-        bytes("Bad Request"),
-        status_code=400,
-        headers=Headers(Header(HeaderKey.CONTENT_TYPE, "text/plain")),
-        status_text="Bad Request",
     )
