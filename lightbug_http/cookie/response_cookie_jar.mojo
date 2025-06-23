@@ -24,7 +24,11 @@ struct ResponseCookieKey(KeyElement):
         return not (self == other)
 
     fn __eq__(self: Self, other: Self) -> Bool:
-        return self.name == other.name and self.domain == other.domain and self.path == other.path
+        return (
+            self.name == other.name
+            and self.domain == other.domain
+            and self.path == other.path
+        )
 
     fn __moveinit__(out self: Self, owned existing: Self):
         self.name = existing.name
@@ -41,13 +45,18 @@ struct ResponseCookieKey(KeyElement):
 
 
 @value
-struct ResponseCookieJar(Writable, Stringable, Copyable, Movable, Sized):
+struct ResponseCookieJar(Copyable, Movable, Sized, Stringable, Writable):
     var _inner: Dict[ResponseCookieKey, Cookie]
 
     fn __init__(out self):
         self._inner = Dict[ResponseCookieKey, Cookie]()
 
     fn __init__(out self, *cookies: Cookie):
+        self._inner = Dict[ResponseCookieKey, Cookie]()
+        for cookie in cookies:
+            self.set_cookie(cookie)
+
+    fn __init__(out self, cookies: List[Cookie]):
         self._inner = Dict[ResponseCookieKey, Cookie]()
         for cookie in cookies:
             self.set_cookie(cookie)
@@ -81,7 +90,9 @@ struct ResponseCookieJar(Writable, Stringable, Copyable, Movable, Sized):
 
     @always_inline
     fn set_cookie(mut self, cookie: Cookie):
-        self[ResponseCookieKey(cookie.name, cookie.domain, cookie.path)] = cookie
+        self[
+            ResponseCookieKey(cookie.name, cookie.domain, cookie.path)
+        ] = cookie
 
     @always_inline
     fn empty(self) -> Bool:
