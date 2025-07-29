@@ -192,3 +192,21 @@ struct HTTPRequest(Writable, Stringable, Encodable):
 
     fn __str__(self) -> String:
         return String.write(self)
+    
+    fn __eq__(self, other: HTTPRequest) -> Bool:
+        return (
+            self.method == other.method
+            and self.protocol == other.protocol
+            and self.uri == other.uri
+            and self.headers == other.headers
+            and self.cookies == other.cookies
+            and self.body_raw.__str__() == other.body_raw.__str__()
+        )
+    
+    fn __isnot__(self, other: HTTPRequest) -> Bool:
+        return not self.__eq__(other)
+
+    fn __isnot__(self, other: None) -> Bool:
+        if self.get_body() != "" or self.uri.request_uri != "":
+            return True
+        return False
