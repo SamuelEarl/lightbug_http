@@ -116,3 +116,13 @@ struct Headers(Writable, Stringable):
 
     fn __str__(self) -> String:
         return String.write(self)
+
+    fn __eq__(self, other: Headers) -> Bool:
+        if len(self._inner) != len(other._inner):
+            return False
+
+        for value in self._inner.items():
+            for other_value in other._inner.items():
+                if value.key != other_value.key or value.value != other_value.value:
+                    return False
+        return True

@@ -240,6 +240,17 @@ struct URI(Writable, Stringable, Representable):
     fn __repr__(self) -> String:
         return String.write(self)
 
+    fn __eq__(self, other: URI) -> Bool:
+        return (
+            self.scheme == other.scheme
+            and self.host == other.host
+            and self.path == other.path
+            and self.query_string == other.query_string
+            and self._original_path == other._original_path
+            and self.full_uri == other.full_uri
+            and self.request_uri == other.request_uri
+        )
+
     fn write_to[T: Writer](self, mut writer: T):
         writer.write(
             "URI(",

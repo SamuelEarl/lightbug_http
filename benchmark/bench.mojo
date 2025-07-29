@@ -5,6 +5,7 @@ from lightbug_http.header import Headers, Header
 from lightbug_http.io.bytes import ByteReader, ByteWriter
 from lightbug_http.http import HTTPRequest, HTTPResponse, encode
 from lightbug_http.uri import URI
+from lightbug_http.server import default_max_request_body_size, default_max_request_uri_length
 
 alias headers = "GET /index.html HTTP/1.1\r\nHost: example.com\r\nUser-Agent: Mozilla/5.0\r\nContent-Type: text/html\r\nContent-Length: 1234\r\nConnection: close\r\nTrailer: end-of-message\r\n\r\n"
 
@@ -73,7 +74,7 @@ fn lightbug_benchmark_request_parse(mut b: Bencher):
     @parameter
     fn request_parse():
         try:
-            _ = HTTPRequest.from_bytes("127.0.0.1/path", 4096, Request.as_bytes())
+            _ = HTTPRequest.from_bytes("127.0.0.1/path", default_max_request_body_size, default_max_request_uri_length, Request.as_bytes())
         except:
             pass
 

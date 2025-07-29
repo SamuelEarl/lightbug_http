@@ -44,7 +44,7 @@ struct HTTPRequest(Writable, Stringable, Encodable):
     var timeout: Duration
 
     @staticmethod
-    fn from_bytes(addr: String, max_body_size: Int, b: Span[Byte]) raises -> HTTPRequest:
+    fn from_bytes(addr: String, max_body_size: Int, max_uri_length: Int, b: Span[Byte]) raises -> HTTPRequest:
         var reader = ByteReader(b)
         var headers = Headers()
         var method: String
@@ -55,6 +55,9 @@ struct HTTPRequest(Writable, Stringable, Encodable):
             method, uri, protocol = rest[0], rest[1], rest[2]
         except e:
             raise Error("HTTPRequest.from_bytes: Failed to parse request headers: " + String(e))
+
+        if len(uri.as_bytes()) > max_uri_length:
+            raise Error("HTTPRequest.from_bytes: Request URI too long")
 
         var cookies = RequestCookieJar()
         try:
@@ -189,3 +192,21 @@ struct HTTPRequest(Writable, Stringable, Encodable):
 
     fn __str__(self) -> String:
         return String.write(self)
+    
+    fn __eq__(self, other: HTTPRequest) -> Bool:
+        return (
+            self.method == other.method
+            and self.protocol == other.protocol
+            and self.uri == other.uri
+            and self.headers == other.headers
+            and self.cookies == other.cookies
+            and self.body_raw.__str__() == other.body_raw.__str__()
+        )
+    
+    fn __isnot__(self, other: HTTPRequest) -> Bool:
+        return not self.__eq__(other)
+
+    fn __isnot__(self, other: None) -> Bool:
+        if self.get_body() != "" or self.uri.request_uri != "":
+            return True
+        return False
