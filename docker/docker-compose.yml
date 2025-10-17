@@ -1,14 +1,17 @@
-version: '3'
 services:
   lightbug:
+    env_file:
+      - "../.env"
     build:
       context: .
-      args:
-        - DEFAULT_SERVER_HOST=${DEFAULT_SERVER_HOST}
-        - DEFAULT_SERVER_PORT=${DEFAULT_SERVER_PORT}
+      dockerfile: Dockerfile
+      # args:
+      #   - DEFAULT_SERVER_HOST=${DEFAULT_SERVER_HOST}
+      #   - DEFAULT_SERVER_PORT=${DEFAULT_SERVER_PORT}
     ports:
-      - "${DEFAULT_SERVER_PORT}:${DEFAULT_SERVER_PORT}"
-    environment:
-      - DEFAULT_SERVER_HOST=${DEFAULT_SERVER_HOST}
-      - DEFAULT_SERVER_PORT=${DEFAULT_SERVER_PORT}
-      - APP_ENTRYPOINT=${APP_ENTRYPOINT}
+      # - "${DEFAULT_SERVER_PORT}:${DEFAULT_SERVER_PORT}"
+      - "8080:8080"
+    # environment:
+    #   - DEFAULT_SERVER_HOST=${DEFAULT_SERVER_HOST}
+    #   - DEFAULT_SERVER_PORT=${DEFAULT_SERVER_PORT}
+    #   - APP_ENTRYPOINT=${APP_ENTRYPOINT}
